@@ -1,103 +1,118 @@
-import Image from "next/image";
+"use client";
+
+import { FaPause, FaPlay } from "react-icons/fa";
+import { useEffect, useRef, useState } from "react";
+
+const SOUND_OPTIONS = [
+  {
+    label: "Café Chatter",
+    file: "/audio/cafe-chatter.mp3",
+    key: "chatter",
+  },
+  {
+    label: "Café With Live Guitar",
+    file: "/audio/cafe-live-guitar.wav",
+    key: "live-guitar",
+  },
+  {
+    label: "Espresso Machine",
+    file: "/audio/espresso.wav",
+    key: "espresso",
+  },
+  {
+    label: "Fireplace",
+    file: "/audio/fireplace.wav",
+    key: "fireplace",
+  },
+  {
+    label: "Preparing Drinks",
+    file: "/audio/preparing-drinks.wav",
+    key: "preparing-drinks",
+  },
+  {
+    label: "Rainy Day",
+    file: "/audio/rainy-day.wav",
+    key: "rainy-day",
+  },
+  {
+    label: "Sunny Day",
+    file: "/audio/sunny-day.wav",
+    key: "sunny-day",
+  },
+  {
+    label: "Typing",
+    file: "/audio/typing.mp3",
+    key: "typing",
+  },
+  {
+    label: "Subway Station",
+    file: "/audio/subway-station.wav",
+    key: "subway-station",
+  },
+];
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [playing, setPlaying] = useState<{ [key: string]: boolean }>({});
+  const audioRefs = useRef<{ [key: string]: HTMLAudioElement | null }>({});
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  useEffect(() => {
+    const newRefs: { [key: string]: HTMLAudioElement | null } = {};
+
+    SOUND_OPTIONS.forEach((sound) => {
+      const audio = new Audio(sound.file);
+      audio.loop = true;
+      newRefs[sound.key] = audio;
+    });
+
+    audioRefs.current = newRefs;
+  }, []);
+
+  const toggleSound = (key: string) => {
+    const audio = audioRefs.current[key];
+    if (!(audio instanceof HTMLAudioElement)) {
+      console.error(`Audio for key "${key}" not initialized properly.`);
+      return;
+    }
+
+    if (playing[key]) {
+      audio.pause();
+    } else {
+      audio.play();
+    }
+
+    setPlaying((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
+  return (
+    <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-amber-100 via-amber-50 to-yellow-100 text-gray-500 p-4 space-y-8 font-sans">
+      <h1 className="text-5xl font-serif text-center drop-shadow-sm">
+        ☕ CaféCloud
+      </h1>
+      <p className="text-lg text-center max-w-xl text-gray-400">
+        A cozy virtual cafe to help you focus, study, and chill.
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-4xl">
+        {SOUND_OPTIONS.map((sound) => (
+          <button
+            key={sound.key}
+            onClick={() => toggleSound(sound.key)}
+            className={`px-6 py-4 rounded-2xl text-lg transition duration-300 hover:cursor-pointer font-medium border shadow-md flex items-center justify-center gap-3 ${
+              playing[sound.key]
+                ? "bg-green-400 text-white hover:bg-green-500"
+                : "bg-white text-gray-500 hover:bg-amber-200"
+            }`}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+            <p>{playing[sound.key] ? <FaPause /> : <FaPlay />}</p>{" "}
+            <p className="w-[90%]">{sound.label}</p>
+          </button>
+        ))}
+      </div>
+      <footer className="text-sm text-gray-400 mt-8">
+        Made with ☕ by You • CaféCloud 2025
       </footer>
-    </div>
+    </main>
   );
 }
