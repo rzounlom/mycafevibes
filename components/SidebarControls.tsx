@@ -102,9 +102,9 @@ export default function SidebarControls({
   };
 
   return (
-    <aside className="w-full space-y-8">
+    <aside className="w-full max-h-[90vh] overflow-hidden flex flex-col">
       {/* Master Volume Control */}
-      <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50">
+      <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 mb-6 flex-shrink-0">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-semibold text-white">Master Volume</h3>
           <button
@@ -149,11 +149,35 @@ export default function SidebarControls({
         </div>
       </div>
 
-      {/* Sound Mixer */}
-      <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50">
-        <h2 className="text-2xl font-semibold mb-6 text-white">Sound Mixer</h2>
+      {/* Sound Mixer - Scrollable */}
+      <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 flex-1 overflow-hidden flex flex-col">
+        <h2 className="text-2xl font-semibold mb-6 text-white flex-shrink-0">
+          Sound Mixer
+        </h2>
 
-        <div className="space-y-6">
+        {/* Settings Panel - Always visible above sounds */}
+        <div className="mb-6 pb-6 border-b border-gray-700/50 flex-shrink-0">
+          <h3 className="text-lg font-medium mb-4 text-gray-200">Settings</h3>
+          <div className="space-y-3 text-sm">
+            <label className="flex items-center gap-3 text-gray-300 hover:text-white transition-colors cursor-pointer">
+              <input
+                type="checkbox"
+                className="w-4 h-4 text-green-500 bg-gray-700 border-gray-600 rounded focus:ring-green-500 focus:ring-2"
+              />
+              <span>Show pan controls</span>
+            </label>
+            <label className="flex items-center gap-3 text-gray-300 hover:text-white transition-colors cursor-pointer">
+              <input
+                type="checkbox"
+                className="w-4 h-4 text-green-500 bg-gray-700 border-gray-600 rounded focus:ring-green-500 focus:ring-2"
+              />
+              <span>Save preferences</span>
+            </label>
+          </div>
+        </div>
+
+        {/* Scrollable Sounds */}
+        <div className="space-y-6 overflow-y-auto flex-1 pr-2">
           {SOUND_CONTROLS.map(({ label, key }) => (
             <div key={key} className="space-y-3">
               <div className="flex items-center justify-between">
@@ -202,27 +226,6 @@ export default function SidebarControls({
               </div>
             </div>
           ))}
-        </div>
-      </div>
-
-      {/* Settings Panel */}
-      <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl p-4 border border-gray-700/30">
-        <h3 className="text-lg font-medium mb-4 text-gray-200">Settings</h3>
-        <div className="space-y-3 text-sm">
-          <label className="flex items-center gap-3 text-gray-300 hover:text-white transition-colors cursor-pointer">
-            <input
-              type="checkbox"
-              className="w-4 h-4 text-green-500 bg-gray-700 border-gray-600 rounded focus:ring-green-500 focus:ring-2"
-            />
-            <span>Show pan controls</span>
-          </label>
-          <label className="flex items-center gap-3 text-gray-300 hover:text-white transition-colors cursor-pointer">
-            <input
-              type="checkbox"
-              className="w-4 h-4 text-green-500 bg-gray-700 border-gray-600 rounded focus:ring-green-500 focus:ring-2"
-            />
-            <span>Save preferences</span>
-          </label>
         </div>
       </div>
     </aside>

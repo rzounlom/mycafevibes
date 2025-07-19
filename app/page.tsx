@@ -23,10 +23,8 @@ export default function Home() {
       <div className="relative z-10 flex flex-col lg:flex-row items-start justify-between w-full h-full p-8 lg:p-12 max-w-7xl mx-auto">
         {/* Left Text Content */}
         <div className="flex-1 lg:pr-16 mb-12 lg:mb-0">
-          <h1 className="text-6xl lg:text-8xl font-bold font-serif leading-tight mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-            I Miss
-            <br />
-            My Cafe
+          <h1 className="text-5xl lg:text-7xl font-bold font-serif leading-tight mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent whitespace-nowrap">
+            Cloud Cafe
           </h1>
           <p className="text-xl lg:text-2xl text-gray-300 mb-8 leading-relaxed">
             Take a seat and stay awhile.
@@ -66,10 +64,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="relative z-10 absolute bottom-4 left-6 text-sm text-gray-500">
-        <p>
-          code and illustrations by ifthencreate, sound design by evan cook,
-        </p>
-        <p>inspired by imissmybar, imisstheoffice, and coffitivity.</p>
+        <p>Created by Cloud Cafe © 2025. All rights reserved.</p>
       </footer>
     </main>
   );
