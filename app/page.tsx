@@ -43,7 +43,7 @@ export default function Home() {
           </div>
 
           {/* Spotify Playlist Section */}
-          <div className="bg-[var(--card-bg)] backdrop-blur-sm rounded-2xl p-6 border border-[var(--card-border)] shadow-lg w-full max-w-full ">
+          <div className="bg-[var(--card-bg)] backdrop-blur-sm rounded-2xl p-6 border border-[var(--card-border)] shadow-lg w-full">
             <h2 className="text-2xl font-semibold mb-4 text-[var(--text-primary)]">
               Cafe Vibes Playlist
             </h2>
