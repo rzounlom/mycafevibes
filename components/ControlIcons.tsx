@@ -262,7 +262,7 @@ export default function ControlIcons() {
 
   return (
     <>
-      <div className="fixed top-6 right-6 flex gap-4 z-50">
+      <div className="fixed top-6 right-6 flex gap-4 z-40">
         <button
           onClick={() => toggle("info")}
           className="p-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-110 backdrop-blur-sm border cursor-pointer bg-purple-500/90 text-white border-purple-400/50"
