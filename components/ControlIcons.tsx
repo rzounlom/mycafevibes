@@ -1,9 +1,20 @@
 "use client";
 
-import { FaClock, FaListUl, FaMoon, FaSun, FaTimes } from "react-icons/fa";
+import {
+  FaClock,
+  FaListUl,
+  FaMoon,
+  FaPause,
+  FaPlay,
+  FaRedo,
+  FaSun,
+  FaTimes,
+} from "react-icons/fa";
 import { useEffect, useState } from "react";
 
 import { useTheme } from "./ThemeContext";
+
+type TimerMode = "pomodoro" | "shortBreak" | "longBreak";
 
 export default function ControlIcons() {
   const { theme, toggleTheme } = useTheme();
@@ -14,10 +25,19 @@ export default function ControlIcons() {
   });
 
   const [showTimer, setShowTimer] = useState(false);
+  const [timerMode, setTimerMode] = useState<TimerMode>("pomodoro");
   const [timerMinutes, setTimerMinutes] = useState(25);
   const [timerRunning, setTimerRunning] = useState(false);
   const [timeLeft, setTimeLeft] = useState(timerMinutes * 60);
   const [timerFinished, setTimerFinished] = useState(false);
+  const [autoStart, setAutoStart] = useState(false);
+
+  // Timer durations
+  const timerDurations = {
+    pomodoro: 25,
+    shortBreak: 5,
+    longBreak: 15,
+  };
 
   // Update active state based on current theme
   useEffect(() => {
@@ -26,6 +46,14 @@ export default function ControlIcons() {
       darkMode: theme === "dark",
     }));
   }, [theme]);
+
+  // Update timer duration when mode changes
+  useEffect(() => {
+    setTimerMinutes(timerDurations[timerMode]);
+    if (!timerRunning) {
+      setTimeLeft(timerDurations[timerMode] * 60);
+    }
+  }, [timerMode, timerRunning]);
 
   // Timer countdown effect
   useEffect(() => {
@@ -41,6 +69,21 @@ export default function ControlIcons() {
             const audio = new Audio("/audio/espresso.wav");
             audio.volume = 0.3;
             audio.play().catch(() => {}); // Ignore errors if audio fails to play
+
+            // Auto-start next timer if enabled
+            if (autoStart) {
+              setTimeout(() => {
+                if (timerMode === "pomodoro") {
+                  setTimerMode("shortBreak");
+                } else if (timerMode === "shortBreak") {
+                  setTimerMode("pomodoro");
+                } else {
+                  setTimerMode("pomodoro");
+                }
+                setTimerFinished(false);
+                setTimerRunning(true);
+              }, 2000);
+            }
             return 0;
           }
           return prev - 1;
@@ -51,7 +94,7 @@ export default function ControlIcons() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [timerRunning, timeLeft]);
+  }, [timerRunning, timeLeft, autoStart, timerMode]);
 
   // Update timeLeft when timerMinutes changes
   useEffect(() => {
@@ -78,17 +121,16 @@ export default function ControlIcons() {
 
   const startTimer = () => {
     setTimerRunning(true);
-    setTimeLeft(timerMinutes * 60);
     setTimerFinished(false);
   };
 
-  const stopTimer = () => {
+  const pauseTimer = () => {
     setTimerRunning(false);
   };
 
   const resetTimer = () => {
     setTimerRunning(false);
-    setTimeLeft(timerMinutes * 60);
+    setTimeLeft(timerDurations[timerMode] * 60);
     setTimerFinished(false);
   };
 
@@ -98,6 +140,28 @@ export default function ControlIcons() {
     return `${mins.toString().padStart(2, "0")}:${secs
       .toString()
       .padStart(2, "0")}`;
+  };
+
+  const getModeLabel = (mode: TimerMode) => {
+    switch (mode) {
+      case "pomodoro":
+        return "Focus Time";
+      case "shortBreak":
+        return "Short Break";
+      case "longBreak":
+        return "Long Break";
+    }
+  };
+
+  const getModeColor = (mode: TimerMode) => {
+    switch (mode) {
+      case "pomodoro":
+        return "text-red-500";
+      case "shortBreak":
+        return "text-green-500";
+      case "longBreak":
+        return "text-blue-500";
+    }
   };
 
   return (
@@ -143,67 +207,98 @@ export default function ControlIcons() {
       {/* Timer Modal */}
       {showTimer && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-gray-800/90 backdrop-blur-md rounded-2xl p-8 border border-gray-700/50 max-w-md w-full dark:bg-gray-800/90 dark:border-gray-700/50">
+          <div className="bg-[var(--modal-bg)] backdrop-blur-md rounded-2xl p-8 border border-[var(--modal-border)] max-w-md w-full shadow-xl">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-semibold text-white">Timer</h3>
+              <h3 className="text-2xl font-semibold text-[var(--text-primary)]">
+                Pomodoro Timer
+              </h3>
               <button
                 onClick={() => setShowTimer(false)}
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer p-2 rounded-lg hover:bg-[var(--button-bg)]"
               >
                 <FaTimes size={20} />
               </button>
             </div>
 
+            {/* Timer Mode Selection */}
+            <div className="flex gap-2 mb-6">
+              {(["pomodoro", "shortBreak", "longBreak"] as TimerMode[]).map(
+                (mode) => (
+                  <button
+                    key={mode}
+                    onClick={() => setTimerMode(mode)}
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors cursor-pointer ${
+                      timerMode === mode
+                        ? "bg-[var(--accent)] text-white"
+                        : "bg-[var(--button-bg)] text-[var(--text-secondary)] hover:bg-[var(--button-hover)]"
+                    }`}
+                  >
+                    {getModeLabel(mode)}
+                  </button>
+                )
+              )}
+            </div>
+
             <div className="text-center mb-6">
               <div
-                className={`text-6xl font-mono font-bold mb-4 transition-colors ${
-                  timerFinished ? "text-green-400 animate-pulse" : "text-white"
-                }`}
+                className={`text-6xl font-mono font-bold mb-4 transition-colors ${getModeColor(
+                  timerMode
+                )} ${timerFinished ? "animate-pulse" : ""}`}
               >
                 {formatTime(timeLeft)}
               </div>
 
+              <div
+                className={`text-lg font-medium mb-4 ${getModeColor(
+                  timerMode
+                )}`}
+              >
+                {getModeLabel(timerMode)}
+              </div>
+
               {timerFinished && (
-                <div className="text-green-400 text-lg font-medium mb-4 animate-pulse">
+                <div className="text-[var(--accent)] text-lg font-medium mb-4 animate-pulse">
                   Time&apos;s up! ☕
                 </div>
               )}
 
-              <div className="flex gap-2 mb-6">
-                <input
-                  type="number"
-                  min="1"
-                  max="120"
-                  value={timerMinutes}
-                  onChange={(e) =>
-                    setTimerMinutes(parseInt(e.target.value) || 25)
-                  }
-                  className="bg-gray-700 text-white px-3 py-2 rounded-lg border border-gray-600 focus:border-green-500 focus:outline-none w-20 text-center dark:bg-gray-700 dark:text-white dark:border-gray-600"
-                  disabled={timerRunning}
-                />
-                <span className="text-gray-300 self-center">minutes</span>
+              {/* Auto-start toggle */}
+              <div className="mb-6">
+                <label className="flex items-center gap-3 text-[var(--text-secondary)] cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={autoStart}
+                    onChange={(e) => setAutoStart(e.target.checked)}
+                    className="w-4 h-4 text-[var(--accent)] bg-[var(--button-bg)] border-[var(--card-border)] rounded focus:ring-[var(--accent)] focus:ring-2"
+                  />
+                  <span>Auto-start next timer</span>
+                </label>
               </div>
 
+              {/* Timer Controls */}
               <div className="flex gap-3 justify-center">
                 {!timerRunning ? (
                   <button
                     onClick={startTimer}
-                    className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                    className="bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer flex items-center gap-2"
                   >
+                    <FaPlay size={14} />
                     Start
                   </button>
                 ) : (
                   <button
-                    onClick={stopTimer}
-                    className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                    onClick={pauseTimer}
+                    className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer flex items-center gap-2"
                   >
-                    Stop
+                    <FaPause size={14} />
+                    Pause
                   </button>
                 )}
                 <button
                   onClick={resetTimer}
-                  className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                  className="bg-[var(--button-bg)] hover:bg-[var(--button-hover)] text-[var(--button-text)] px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer flex items-center gap-2"
                 >
+                  <FaRedo size={14} />
                   Reset
                 </button>
               </div>
