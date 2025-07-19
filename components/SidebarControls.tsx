@@ -168,14 +168,14 @@ export default function SidebarControls({
             <label className="flex items-center gap-3 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer">
               <input
                 type="checkbox"
-                className="w-4 h-4 text-[var(--accent)] bg-[var(--button-bg)] border-[var(--card-border)] rounded focus:ring-[var(--accent)] focus:ring-2"
+                className="w-4 h-4 text-[var(--accent)] bg-[var(--button-bg)] border-[var(--card-border)] rounded focus:ring-[var(--accent)] focus:ring-2 cursor-pointer"
               />
               <span>Show pan controls</span>
             </label>
             <label className="flex items-center gap-3 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer">
               <input
                 type="checkbox"
-                className="w-4 h-4 text-[var(--accent)] bg-[var(--button-bg)] border-[var(--card-border)] rounded focus:ring-[var(--accent)] focus:ring-2"
+                className="w-4 h-4 text-[var(--accent)] bg-[var(--button-bg)] border-[var(--card-border)] rounded focus:ring-[var(--accent)] focus:ring-2 cursor-pointer"
               />
               <span>Save preferences</span>
             </label>
@@ -194,7 +194,7 @@ export default function SidebarControls({
                   {showPlayPause && (
                     <button
                       onClick={() => togglePlay(key)}
-                      className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
+                      className={`p-2 rounded-full transition-all duration-200 hover:scale-110 cursor-pointer ${
                         playing[key]
                           ? "bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)]"
                           : "bg-[var(--button-bg)] text-[var(--button-text)] hover:bg-[var(--button-hover)]"

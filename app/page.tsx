@@ -41,19 +41,6 @@ export default function Home() {
               working environment, just like being back at your local cafe.
             </p>
           </div>
-
-          {/* Quick Start Guide */}
-          <div className="mt-8 p-6 bg-[var(--card-bg)] backdrop-blur-sm rounded-xl border border-[var(--card-border)] shadow-lg">
-            <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
-              Quick Start
-            </h3>
-            <div className="text-sm text-[var(--text-secondary)] space-y-2">
-              <p>• Use the master volume to control overall sound level</p>
-              <p>• Mix individual sounds to create your perfect atmosphere</p>
-              <p>• Set a timer to take regular breaks</p>
-              <p>• Save your preferences for next time</p>
-            </div>
-          </div>
         </div>
 
         {/* Right Sidebar Controls */}

@@ -1,7 +1,9 @@
 "use client";
 
 import {
+  FaBook,
   FaClock,
+  FaInfoCircle,
   FaListUl,
   FaMoon,
   FaPause,
@@ -22,9 +24,11 @@ export default function ControlIcons() {
     timer: false,
     darkMode: false,
     todo: false,
+    info: false,
   });
 
   const [showTimer, setShowTimer] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
   const [timerMode, setTimerMode] = useState<TimerMode>("pomodoro");
   const [timerMinutes, setTimerMinutes] = useState(25);
   const [timerRunning, setTimerRunning] = useState(false);
@@ -115,6 +119,8 @@ export default function ControlIcons() {
       setShowTimer(!showTimer);
     } else if (key === "darkMode") {
       toggleTheme();
+    } else if (key === "info") {
+      setShowInfo(!showInfo);
     }
     setActive((prev) => ({ ...prev, [key]: !prev[key] }));
   };
@@ -168,15 +174,11 @@ export default function ControlIcons() {
     <>
       <div className="fixed top-6 right-6 flex gap-4 z-50">
         <button
-          onClick={() => toggle("timer")}
-          className={`p-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-110 backdrop-blur-sm border cursor-pointer ${
-            active.timer
-              ? "bg-green-500/90 text-white border-green-400/50"
-              : "bg-gray-800/80 text-gray-300 border-gray-700/50 hover:bg-gray-700/80 hover:text-white dark:bg-gray-800/80 dark:text-gray-300 dark:border-gray-700/50 dark:hover:bg-gray-700/80 dark:hover:text-white"
-          }`}
-          title="Timer"
+          onClick={() => toggle("info")}
+          className="p-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-110 backdrop-blur-sm border cursor-pointer bg-purple-500/90 text-white border-purple-400/50"
+          title="Quick Start Guide"
         >
-          <FaClock size={18} />
+          <FaInfoCircle size={18} />
         </button>
         <button
           onClick={() => toggle("darkMode")}
@@ -192,15 +194,26 @@ export default function ControlIcons() {
           {theme === "dark" ? <FaSun size={18} /> : <FaMoon size={18} />}
         </button>
         <button
+          onClick={() => toggle("timer")}
+          className={`p-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-110 backdrop-blur-sm border cursor-pointer ${
+            active.timer
+              ? "bg-green-500/90 text-white border-green-400/50"
+              : "bg-gray-800/80 text-gray-300 border-gray-700/50 hover:bg-gray-700/80 hover:text-white dark:bg-gray-800/80 dark:text-gray-300 dark:border-gray-700/50 dark:hover:bg-gray-700/80 dark:hover:text-white"
+          }`}
+          title="Timer"
+        >
+          <FaClock size={18} />
+        </button>
+        <button
           onClick={() => toggle("todo")}
           className={`p-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-110 backdrop-blur-sm border cursor-pointer ${
             active.todo
               ? "bg-purple-500/90 text-white border-purple-400/50"
               : "bg-gray-800/80 text-gray-300 border-gray-700/50 hover:bg-gray-700/80 hover:text-white dark:bg-gray-800/80 dark:text-gray-300 dark:border-gray-700/50 dark:hover:bg-gray-700/80 dark:hover:text-white"
           }`}
-          title="To-Do List"
+          title="Notes"
         >
-          <FaListUl size={18} />
+          <FaBook size={18} />
         </button>
       </div>
 
@@ -302,6 +315,57 @@ export default function ControlIcons() {
                   Reset
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Quick Start Info Modal */}
+      {showInfo && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-[var(--modal-bg)] backdrop-blur-md rounded-2xl p-8 border border-[var(--modal-border)] max-w-lg w-full shadow-xl">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-semibold text-[var(--text-primary)]">
+                Quick Start Guide
+              </h3>
+              <button
+                onClick={() => setShowInfo(false)}
+                className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer p-2 rounded-lg hover:bg-[var(--button-bg)]"
+              >
+                <FaTimes size={20} />
+              </button>
+            </div>
+
+            <div className="space-y-4 text-[var(--text-secondary)]">
+              <div className="flex items-start gap-3">
+                <div className="w-2 h-2 bg-[var(--accent)] rounded-full mt-2 flex-shrink-0"></div>
+                <p>Use the master volume to control overall sound level</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-2 h-2 bg-[var(--accent)] rounded-full mt-2 flex-shrink-0"></div>
+                <p>Mix individual sounds to create your perfect atmosphere</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-2 h-2 bg-[var(--accent)] rounded-full mt-2 flex-shrink-0"></div>
+                <p>
+                  Set a timer to take regular breaks using the Pomodoro
+                  technique
+                </p>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-2 h-2 bg-[var(--accent)] rounded-full mt-2 flex-shrink-0"></div>
+                <p>Save your preferences for next time</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-2 h-2 bg-[var(--accent)] rounded-full mt-2 flex-shrink-0"></div>
+                <p>Toggle between light and dark themes for your comfort</p>
+              </div>
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-[var(--card-border)]">
+              <p className="text-sm text-[var(--text-muted)] text-center">
+                Enjoy your perfect cafe atmosphere! ☕
+              </p>
             </div>
           </div>
         </div>
