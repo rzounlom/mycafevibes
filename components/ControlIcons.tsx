@@ -18,6 +18,13 @@ import { useTheme } from "./ThemeContext";
 
 type TimerMode = "pomodoro" | "shortBreak" | "longBreak";
 
+// Storage keys for pomodoro preferences
+const POMODORO_STORAGE_KEYS = {
+  TIMER_MODE: "cloudcafe_timer_mode",
+  AUTO_START: "cloudcafe_auto_start",
+  SAVE_PREFERENCES: "cloudcafe_save_preferences",
+};
+
 export default function ControlIcons() {
   const { theme, toggleTheme } = useTheme();
   const [active, setActive] = useState({
@@ -35,12 +42,58 @@ export default function ControlIcons() {
   const [timeLeft, setTimeLeft] = useState(timerMinutes * 60);
   const [timerFinished, setTimerFinished] = useState(false);
   const [autoStart, setAutoStart] = useState(false);
+  const [savePreferences, setSavePreferences] = useState(false);
 
   // Timer durations
   const timerDurations = {
     pomodoro: 25,
     shortBreak: 5,
     longBreak: 15,
+  };
+
+  // Load pomodoro preferences on component mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        // Load save preferences setting first
+        const savedSavePrefs = localStorage.getItem(
+          POMODORO_STORAGE_KEYS.SAVE_PREFERENCES
+        );
+        const shouldSave = savedSavePrefs ? JSON.parse(savedSavePrefs) : false;
+        setSavePreferences(shouldSave);
+
+        if (shouldSave) {
+          // Load timer mode
+          const savedTimerMode = localStorage.getItem(
+            POMODORO_STORAGE_KEYS.TIMER_MODE
+          );
+          if (savedTimerMode) {
+            setTimerMode(JSON.parse(savedTimerMode));
+          }
+
+          // Load auto-start setting
+          const savedAutoStart = localStorage.getItem(
+            POMODORO_STORAGE_KEYS.AUTO_START
+          );
+          if (savedAutoStart) {
+            setAutoStart(JSON.parse(savedAutoStart));
+          }
+        }
+      } catch (error) {
+        console.error("Error loading pomodoro preferences:", error);
+      }
+    }
+  }, []);
+
+  // Save pomodoro preferences
+  const savePomodoroPreference = (key: string, value: string | boolean) => {
+    if (typeof window !== "undefined" && savePreferences) {
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+      } catch (error) {
+        console.error("Error saving pomodoro preferences:", error);
+      }
+    }
   };
 
   // Update active state based on current theme
@@ -138,6 +191,33 @@ export default function ControlIcons() {
     setTimerRunning(false);
     setTimeLeft(timerDurations[timerMode] * 60);
     setTimerFinished(false);
+  };
+
+  const handleTimerModeChange = (mode: TimerMode) => {
+    setTimerMode(mode);
+    savePomodoroPreference(POMODORO_STORAGE_KEYS.TIMER_MODE, mode);
+  };
+
+  const handleAutoStartChange = (checked: boolean) => {
+    setAutoStart(checked);
+    savePomodoroPreference(POMODORO_STORAGE_KEYS.AUTO_START, checked);
+  };
+
+  const handleSavePreferencesChange = (checked: boolean) => {
+    setSavePreferences(checked);
+    localStorage.setItem(
+      POMODORO_STORAGE_KEYS.SAVE_PREFERENCES,
+      JSON.stringify(checked)
+    );
+
+    // If turning off save preferences, clear all saved pomodoro data
+    if (!checked) {
+      Object.values(POMODORO_STORAGE_KEYS).forEach((key) => {
+        if (key !== POMODORO_STORAGE_KEYS.SAVE_PREFERENCES) {
+          localStorage.removeItem(key);
+        }
+      });
+    }
   };
 
   const formatTime = (seconds: number) => {
@@ -239,7 +319,7 @@ export default function ControlIcons() {
                 (mode) => (
                   <button
                     key={mode}
-                    onClick={() => setTimerMode(mode)}
+                    onClick={() => handleTimerModeChange(mode)}
                     className={`px-4 py-2 rounded-lg font-medium transition-colors cursor-pointer ${
                       timerMode === mode
                         ? "bg-[var(--accent)] text-white"
@@ -281,10 +361,25 @@ export default function ControlIcons() {
                   <input
                     type="checkbox"
                     checked={autoStart}
-                    onChange={(e) => setAutoStart(e.target.checked)}
+                    onChange={(e) => handleAutoStartChange(e.target.checked)}
                     className="w-4 h-4 text-[var(--accent)] bg-[var(--button-bg)] border-[var(--card-border)] rounded focus:ring-[var(--accent)] focus:ring-2"
                   />
                   <span>Auto-start next timer</span>
+                </label>
+              </div>
+
+              {/* Save preferences toggle */}
+              <div className="mb-6">
+                <label className="flex items-center gap-3 text-[var(--text-secondary)] cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={savePreferences}
+                    onChange={(e) =>
+                      handleSavePreferencesChange(e.target.checked)
+                    }
+                    className="w-4 h-4 text-[var(--accent)] bg-[var(--button-bg)] border-[var(--card-border)] rounded focus:ring-[var(--accent)] focus:ring-2"
+                  />
+                  <span>Save preferences</span>
                 </label>
               </div>
 
@@ -354,7 +449,10 @@ export default function ControlIcons() {
               </div>
               <div className="flex items-start gap-3">
                 <div className="w-2 h-2 bg-[var(--accent)] rounded-full mt-2 flex-shrink-0"></div>
-                <p>Save your preferences for next time</p>
+                <p>
+                  Enable &quot;Save preferences&quot; to remember your settings
+                  across sessions
+                </p>
               </div>
               <div className="flex items-start gap-3">
                 <div className="w-2 h-2 bg-[var(--accent)] rounded-full mt-2 flex-shrink-0"></div>

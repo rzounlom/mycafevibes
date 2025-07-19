@@ -27,6 +27,15 @@ const SOUND_CONTROLS = [
   },
 ];
 
+// Storage keys
+const STORAGE_KEYS = {
+  VOLUMES: "cloudcafe_volumes",
+  PANS: "cloudcafe_pans",
+  MASTER_VOLUME: "cloudcafe_master_volume",
+  SHOW_PAN_CONTROLS: "cloudcafe_show_pan_controls",
+  SAVE_PREFERENCES: "cloudcafe_save_preferences",
+};
+
 export default function SidebarControls({
   showPlayPause = false,
 }: {
@@ -35,10 +44,75 @@ export default function SidebarControls({
   const [volumes, setVolumes] = useState<Record<string, number>>(
     SOUND_CONTROLS.reduce((acc, { key }) => ({ ...acc, [key]: 0.7 }), {})
   );
+  const [pans, setPans] = useState<Record<string, number>>(
+    SOUND_CONTROLS.reduce((acc, { key }) => ({ ...acc, [key]: 0.5 }), {})
+  );
   const [masterVolume, setMasterVolume] = useState(0.8);
   const [playing, setPlaying] = useState<{ [key: string]: boolean }>({});
   const [muted, setMuted] = useState(false);
+  const [showPanControls, setShowPanControls] = useState(false);
+  const [savePreferences, setSavePreferences] = useState(false);
   const audioRefs = useRef<{ [key: string]: HTMLAudioElement | null }>({});
+
+  // Load preferences on component mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        // Load save preferences setting first
+        const savedSavePrefs = localStorage.getItem(
+          STORAGE_KEYS.SAVE_PREFERENCES
+        );
+        const shouldSave = savedSavePrefs ? JSON.parse(savedSavePrefs) : false;
+        setSavePreferences(shouldSave);
+
+        if (shouldSave) {
+          // Load volumes
+          const savedVolumes = localStorage.getItem(STORAGE_KEYS.VOLUMES);
+          if (savedVolumes) {
+            setVolumes(JSON.parse(savedVolumes));
+          }
+
+          // Load pans
+          const savedPans = localStorage.getItem(STORAGE_KEYS.PANS);
+          if (savedPans) {
+            setPans(JSON.parse(savedPans));
+          }
+
+          // Load master volume
+          const savedMasterVolume = localStorage.getItem(
+            STORAGE_KEYS.MASTER_VOLUME
+          );
+          if (savedMasterVolume) {
+            setMasterVolume(JSON.parse(savedMasterVolume));
+          }
+
+          // Load pan controls visibility
+          const savedShowPanControls = localStorage.getItem(
+            STORAGE_KEYS.SHOW_PAN_CONTROLS
+          );
+          if (savedShowPanControls) {
+            setShowPanControls(JSON.parse(savedShowPanControls));
+          }
+        }
+      } catch (error) {
+        console.error("Error loading preferences:", error);
+      }
+    }
+  }, []);
+
+  // Save preferences whenever they change
+  const saveToStorage = (
+    key: string,
+    value: string | number | boolean | Record<string, unknown>
+  ) => {
+    if (typeof window !== "undefined" && savePreferences) {
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+      } catch (error) {
+        console.error("Error saving preferences:", error);
+      }
+    }
+  };
 
   useEffect(() => {
     const newRefs: { [key: string]: HTMLAudioElement | null } = {};
@@ -65,6 +139,8 @@ export default function SidebarControls({
 
   const handleVolumeChange = (key: string, value: number) => {
     setVolumes((prev) => ({ ...prev, [key]: value }));
+    saveToStorage(STORAGE_KEYS.VOLUMES, { ...volumes, [key]: value });
+
     const audio = audioRefs.current[key];
     if (audio) {
       const effectiveVolume = muted ? 0 : value * masterVolume;
@@ -72,9 +148,22 @@ export default function SidebarControls({
     }
   };
 
+  const handlePanChange = (key: string, value: number) => {
+    setPans((prev) => ({ ...prev, [key]: value }));
+    saveToStorage(STORAGE_KEYS.PANS, { ...pans, [key]: value });
+
+    const audio = audioRefs.current[key];
+    if (audio) {
+      // Convert pan value from -1 to 1 range to stereo panning
+      const panValue = (value - 0.5) * 2; // Convert 0-1 to -1 to 1
+      audio.style.transform = `translateX(${panValue * 50}%)`;
+    }
+  };
+
   const handleMasterVolumeChange = (value: number) => {
     setMasterVolume(value);
     setMuted(value === 0);
+    saveToStorage(STORAGE_KEYS.MASTER_VOLUME, value);
 
     // Update all playing audio volumes
     Object.keys(audioRefs.current).forEach((key) => {
@@ -99,6 +188,28 @@ export default function SidebarControls({
         audio.volume = effectiveVolume;
       }
     });
+  };
+
+  const handleShowPanControlsChange = (checked: boolean) => {
+    setShowPanControls(checked);
+    saveToStorage(STORAGE_KEYS.SHOW_PAN_CONTROLS, checked);
+  };
+
+  const handleSavePreferencesChange = (checked: boolean) => {
+    setSavePreferences(checked);
+    localStorage.setItem(
+      STORAGE_KEYS.SAVE_PREFERENCES,
+      JSON.stringify(checked)
+    );
+
+    // If turning off save preferences, clear all saved data
+    if (!checked) {
+      Object.values(STORAGE_KEYS).forEach((key) => {
+        if (key !== STORAGE_KEYS.SAVE_PREFERENCES) {
+          localStorage.removeItem(key);
+        }
+      });
+    }
   };
 
   return (
@@ -168,13 +279,17 @@ export default function SidebarControls({
             <label className="flex items-center gap-3 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer">
               <input
                 type="checkbox"
-                className="w-4 h-4 text-[var(--accent)] bg-[var(--button-bg)] border-[var(--card-border)] rounded focus:ring-[var(--accent)] focus:ring-2 cursor-pointer"
+                checked={showPanControls}
+                onChange={(e) => handleShowPanControlsChange(e.target.checked)}
+                className="w-4 h-4 text-purple-500 bg-[var(--button-bg)] border-[var(--card-border)] rounded focus:ring-purple-500 focus:ring-2 cursor-pointer"
               />
               <span>Show pan controls</span>
             </label>
             <label className="flex items-center gap-3 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer">
               <input
                 type="checkbox"
+                checked={savePreferences}
+                onChange={(e) => handleSavePreferencesChange(e.target.checked)}
                 className="w-4 h-4 text-[var(--accent)] bg-[var(--button-bg)] border-[var(--card-border)] rounded focus:ring-[var(--accent)] focus:ring-2 cursor-pointer"
               />
               <span>Save preferences</span>
@@ -234,6 +349,37 @@ export default function SidebarControls({
                   <span>100</span>
                 </div>
               </div>
+
+              {/* Pan Control Slider */}
+              {showPanControls && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
+                    <span>L</span>
+                    <span>Pan</span>
+                    <span>R</span>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.01"
+                      value={pans[key]}
+                      onChange={(e) =>
+                        handlePanChange(key, parseFloat(e.target.value))
+                      }
+                      className="w-full h-2 bg-[var(--slider-bg)] rounded-lg appearance-none cursor-pointer pan-slider"
+                      style={{
+                        background: `linear-gradient(to right, #8b5cf6 0%, #8b5cf6 ${
+                          pans[key] * 100
+                        }%, var(--slider-bg) ${
+                          pans[key] * 100
+                        }%, var(--slider-bg) 100%)`,
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>
