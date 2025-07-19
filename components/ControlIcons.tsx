@@ -98,13 +98,16 @@ export default function ControlIcons() {
     }
   };
 
-  // Update active state based on current theme
+  // Update active state based on current theme and modal states
   useEffect(() => {
     setActive((prev) => ({
       ...prev,
       darkMode: theme === "dark",
+      info: showInfo,
+      timer: showTimer,
+      todo: showTodoList,
     }));
-  }, [theme]);
+  }, [theme, showInfo, showTimer, showTodoList]);
 
   // Update timer duration when mode changes
   useEffect(() => {
@@ -179,7 +182,10 @@ export default function ControlIcons() {
     } else if (key === "todo") {
       setShowTodoList(!showTodoList);
     }
-    setActive((prev) => ({ ...prev, [key]: !prev[key] }));
+    // Only update active state for dark mode toggle, others are managed by useEffect
+    if (key === "darkMode") {
+      setActive((prev) => ({ ...prev, [key]: !prev[key] }));
+    }
   };
 
   const startTimer = () => {
@@ -303,8 +309,14 @@ export default function ControlIcons() {
 
       {/* Timer Modal */}
       {showTimer && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[var(--modal-bg)] backdrop-blur-md rounded-2xl p-8 border border-[var(--modal-border)] max-w-md w-full shadow-xl">
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setShowTimer(false)}
+        >
+          <div
+            className="bg-[var(--modal-bg)] backdrop-blur-md rounded-2xl p-8 border border-[var(--modal-border)] max-w-md w-full shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-2xl font-semibold text-[var(--text-primary)]">
                 Pomodoro Timer
@@ -421,8 +433,14 @@ export default function ControlIcons() {
 
       {/* Quick Start Info Modal */}
       {showInfo && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[var(--modal-bg)] backdrop-blur-md rounded-2xl p-8 border border-[var(--modal-border)] max-w-lg w-full shadow-xl">
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setShowInfo(false)}
+        >
+          <div
+            className="bg-[var(--modal-bg)] backdrop-blur-md rounded-2xl p-8 border border-[var(--modal-border)] max-w-lg w-full shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-2xl font-semibold text-[var(--text-primary)]">
                 Quick Start Guide
