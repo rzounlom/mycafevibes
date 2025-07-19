@@ -14,6 +14,7 @@ import {
 } from "react-icons/fa";
 import { useEffect, useState } from "react";
 
+import TodoList from "./TodoList";
 import { useTheme } from "./ThemeContext";
 
 type TimerMode = "pomodoro" | "shortBreak" | "longBreak";
@@ -36,6 +37,7 @@ export default function ControlIcons() {
 
   const [showTimer, setShowTimer] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const [showTodoList, setShowTodoList] = useState(false);
   const [timerMode, setTimerMode] = useState<TimerMode>("pomodoro");
   const [timerMinutes, setTimerMinutes] = useState(25);
   const [timerRunning, setTimerRunning] = useState(false);
@@ -174,6 +176,8 @@ export default function ControlIcons() {
       toggleTheme();
     } else if (key === "info") {
       setShowInfo(!showInfo);
+    } else if (key === "todo") {
+      setShowTodoList(!showTodoList);
     }
     setActive((prev) => ({ ...prev, [key]: !prev[key] }));
   };
@@ -458,6 +462,12 @@ export default function ControlIcons() {
                 <div className="w-2 h-2 bg-[var(--accent)] rounded-full mt-2 flex-shrink-0"></div>
                 <p>Toggle between light and dark themes for your comfort</p>
               </div>
+              <div className="flex items-start gap-3">
+                <div className="w-2 h-2 bg-[var(--accent)] rounded-full mt-2 flex-shrink-0"></div>
+                <p>
+                  Use the notebook icon to manage your tasks and stay organized
+                </p>
+              </div>
             </div>
 
             <div className="mt-8 pt-6 border-t border-[var(--card-border)]">
@@ -468,6 +478,9 @@ export default function ControlIcons() {
           </div>
         </div>
       )}
+
+      {/* Todo List Modal */}
+      {showTodoList && <TodoList onClose={() => setShowTodoList(false)} />}
     </>
   );
 }
