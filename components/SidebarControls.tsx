@@ -102,17 +102,19 @@ export default function SidebarControls({
   };
 
   return (
-    <aside className="w-full max-h-[90vh] overflow-hidden flex flex-col">
+    <aside className="w-full max-w-md max-h-[90vh] overflow-hidden flex flex-col">
       {/* Master Volume Control */}
-      <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 mb-6 flex-shrink-0">
+      <div className="bg-[var(--card-bg)] backdrop-blur-sm rounded-2xl p-6 border border-[var(--card-border)] mb-6 flex-shrink-0 shadow-lg">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-semibold text-white">Master Volume</h3>
+          <h3 className="text-xl font-semibold text-[var(--text-primary)]">
+            Master Volume
+          </h3>
           <button
             onClick={toggleMute}
             className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
               muted || masterVolume === 0
                 ? "bg-red-500/90 text-white"
-                : "bg-gray-600 text-gray-300 hover:bg-gray-500 hover:text-white"
+                : "bg-[var(--button-bg)] text-[var(--button-text)] hover:bg-[var(--button-hover)]"
             }`}
           >
             {muted || masterVolume === 0 ? (
@@ -134,14 +136,16 @@ export default function SidebarControls({
               onChange={(e) =>
                 handleMasterVolumeChange(parseFloat(e.target.value))
               }
-              className="w-full h-3 bg-gray-600 rounded-lg appearance-none cursor-pointer slider"
+              className="w-full h-3 bg-[var(--slider-bg)] rounded-lg appearance-none cursor-pointer slider"
               style={{
-                background: `linear-gradient(to right, #10b981 0%, #10b981 ${
+                background: `linear-gradient(to right, var(--slider-fill) 0%, var(--slider-fill) ${
                   masterVolume * 100
-                }%, #4b5563 ${masterVolume * 100}%, #4b5563 100%)`,
+                }%, var(--slider-bg) ${
+                  masterVolume * 100
+                }%, var(--slider-bg) 100%)`,
               }}
             />
-            <div className="flex justify-between text-xs text-gray-400 mt-1">
+            <div className="flex justify-between text-xs text-[var(--text-muted)] mt-1">
               <span>0</span>
               <span>100</span>
             </div>
@@ -150,26 +154,28 @@ export default function SidebarControls({
       </div>
 
       {/* Sound Mixer - Scrollable */}
-      <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 flex-1 overflow-hidden flex flex-col">
-        <h2 className="text-2xl font-semibold mb-6 text-white flex-shrink-0">
+      <div className="bg-[var(--card-bg)] backdrop-blur-sm rounded-2xl p-6 border border-[var(--card-border)] flex-1 overflow-hidden flex flex-col shadow-lg">
+        <h2 className="text-2xl font-semibold mb-6 text-[var(--text-primary)] flex-shrink-0">
           Sound Mixer
         </h2>
 
         {/* Settings Panel - Always visible above sounds */}
-        <div className="mb-6 pb-6 border-b border-gray-700/50 flex-shrink-0">
-          <h3 className="text-lg font-medium mb-4 text-gray-200">Settings</h3>
+        <div className="mb-6 pb-6 border-b border-[var(--card-border)] flex-shrink-0">
+          <h3 className="text-lg font-medium mb-4 text-[var(--text-primary)]">
+            Settings
+          </h3>
           <div className="space-y-3 text-sm">
-            <label className="flex items-center gap-3 text-gray-300 hover:text-white transition-colors cursor-pointer">
+            <label className="flex items-center gap-3 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer">
               <input
                 type="checkbox"
-                className="w-4 h-4 text-green-500 bg-gray-700 border-gray-600 rounded focus:ring-green-500 focus:ring-2"
+                className="w-4 h-4 text-[var(--accent)] bg-[var(--button-bg)] border-[var(--card-border)] rounded focus:ring-[var(--accent)] focus:ring-2"
               />
               <span>Show pan controls</span>
             </label>
-            <label className="flex items-center gap-3 text-gray-300 hover:text-white transition-colors cursor-pointer">
+            <label className="flex items-center gap-3 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer">
               <input
                 type="checkbox"
-                className="w-4 h-4 text-green-500 bg-gray-700 border-gray-600 rounded focus:ring-green-500 focus:ring-2"
+                className="w-4 h-4 text-[var(--accent)] bg-[var(--button-bg)] border-[var(--card-border)] rounded focus:ring-[var(--accent)] focus:ring-2"
               />
               <span>Save preferences</span>
             </label>
@@ -181,15 +187,17 @@ export default function SidebarControls({
           {SOUND_CONTROLS.map(({ label, key }) => (
             <div key={key} className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-gray-200 font-medium">{label}</span>
+                <span className="text-[var(--text-secondary)] font-medium">
+                  {label}
+                </span>
                 <div className="flex items-center gap-3">
                   {showPlayPause && (
                     <button
                       onClick={() => togglePlay(key)}
                       className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
                         playing[key]
-                          ? "bg-green-500 text-white hover:bg-green-600"
-                          : "bg-gray-600 text-gray-300 hover:bg-gray-500 hover:text-white"
+                          ? "bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)]"
+                          : "bg-[var(--button-bg)] text-[var(--button-text)] hover:bg-[var(--button-hover)]"
                       }`}
                     >
                       {playing[key] ? (
@@ -199,7 +207,7 @@ export default function SidebarControls({
                       )}
                     </button>
                   )}
-                  <FaVolumeUp className="text-gray-400 text-sm" />
+                  <FaVolumeUp className="text-[var(--text-muted)] text-sm" />
                 </div>
               </div>
               <div className="relative">
@@ -212,14 +220,16 @@ export default function SidebarControls({
                   onChange={(e) =>
                     handleVolumeChange(key, parseFloat(e.target.value))
                   }
-                  className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer slider"
+                  className="w-full h-2 bg-[var(--slider-bg)] rounded-lg appearance-none cursor-pointer slider"
                   style={{
-                    background: `linear-gradient(to right, #10b981 0%, #10b981 ${
+                    background: `linear-gradient(to right, var(--slider-fill) 0%, var(--slider-fill) ${
                       volumes[key] * 100
-                    }%, #4b5563 ${volumes[key] * 100}%, #4b5563 100%)`,
+                    }%, var(--slider-bg) ${
+                      volumes[key] * 100
+                    }%, var(--slider-bg) 100%)`,
                   }}
                 />
-                <div className="flex justify-between text-xs text-gray-400 mt-1">
+                <div className="flex justify-between text-xs text-[var(--text-muted)] mt-1">
                   <span>0</span>
                   <span>100</span>
                 </div>

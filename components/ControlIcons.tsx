@@ -1,9 +1,12 @@
 "use client";
 
-import { FaClock, FaListUl, FaMoon, FaTimes } from "react-icons/fa";
+import { FaClock, FaListUl, FaMoon, FaSun, FaTimes } from "react-icons/fa";
 import { useEffect, useState } from "react";
 
+import { useTheme } from "./ThemeContext";
+
 export default function ControlIcons() {
+  const { theme, toggleTheme } = useTheme();
   const [active, setActive] = useState({
     timer: false,
     darkMode: false,
@@ -15,6 +18,14 @@ export default function ControlIcons() {
   const [timerRunning, setTimerRunning] = useState(false);
   const [timeLeft, setTimeLeft] = useState(timerMinutes * 60);
   const [timerFinished, setTimerFinished] = useState(false);
+
+  // Update active state based on current theme
+  useEffect(() => {
+    setActive((prev) => ({
+      ...prev,
+      darkMode: theme === "dark",
+    }));
+  }, [theme]);
 
   // Timer countdown effect
   useEffect(() => {
@@ -59,6 +70,8 @@ export default function ControlIcons() {
   const toggle = (key: keyof typeof active) => {
     if (key === "timer") {
       setShowTimer(!showTimer);
+    } else if (key === "darkMode") {
+      toggleTheme();
     }
     setActive((prev) => ({ ...prev, [key]: !prev[key] }));
   };
@@ -92,10 +105,10 @@ export default function ControlIcons() {
       <div className="fixed top-6 right-6 flex gap-4 z-50">
         <button
           onClick={() => toggle("timer")}
-          className={`p-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-110 backdrop-blur-sm border ${
+          className={`p-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-110 backdrop-blur-sm border cursor-pointer ${
             active.timer
               ? "bg-green-500/90 text-white border-green-400/50"
-              : "bg-gray-800/80 text-gray-300 border-gray-700/50 hover:bg-gray-700/80 hover:text-white"
+              : "bg-gray-800/80 text-gray-300 border-gray-700/50 hover:bg-gray-700/80 hover:text-white dark:bg-gray-800/80 dark:text-gray-300 dark:border-gray-700/50 dark:hover:bg-gray-700/80 dark:hover:text-white"
           }`}
           title="Timer"
         >
@@ -103,21 +116,23 @@ export default function ControlIcons() {
         </button>
         <button
           onClick={() => toggle("darkMode")}
-          className={`p-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-110 backdrop-blur-sm border ${
+          className={`p-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-110 backdrop-blur-sm border cursor-pointer ${
             active.darkMode
               ? "bg-blue-500/90 text-white border-blue-400/50"
-              : "bg-gray-800/80 text-gray-300 border-gray-700/50 hover:bg-gray-700/80 hover:text-white"
+              : "bg-gray-800/80 text-gray-300 border-gray-700/50 hover:bg-gray-700/80 hover:text-white dark:bg-gray-800/80 dark:text-gray-300 dark:border-gray-700/50 dark:hover:bg-gray-700/80 dark:hover:text-white"
           }`}
-          title="Dark Mode"
+          title={
+            theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"
+          }
         >
-          <FaMoon size={18} />
+          {theme === "dark" ? <FaSun size={18} /> : <FaMoon size={18} />}
         </button>
         <button
           onClick={() => toggle("todo")}
-          className={`p-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-110 backdrop-blur-sm border ${
+          className={`p-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-110 backdrop-blur-sm border cursor-pointer ${
             active.todo
               ? "bg-purple-500/90 text-white border-purple-400/50"
-              : "bg-gray-800/80 text-gray-300 border-gray-700/50 hover:bg-gray-700/80 hover:text-white"
+              : "bg-gray-800/80 text-gray-300 border-gray-700/50 hover:bg-gray-700/80 hover:text-white dark:bg-gray-800/80 dark:text-gray-300 dark:border-gray-700/50 dark:hover:bg-gray-700/80 dark:hover:text-white"
           }`}
           title="To-Do List"
         >
@@ -128,7 +143,7 @@ export default function ControlIcons() {
       {/* Timer Modal */}
       {showTimer && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-gray-800/90 backdrop-blur-md rounded-2xl p-8 border border-gray-700/50 max-w-md w-full">
+          <div className="bg-gray-800/90 backdrop-blur-md rounded-2xl p-8 border border-gray-700/50 max-w-md w-full dark:bg-gray-800/90 dark:border-gray-700/50">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-2xl font-semibold text-white">Timer</h3>
               <button
@@ -163,7 +178,7 @@ export default function ControlIcons() {
                   onChange={(e) =>
                     setTimerMinutes(parseInt(e.target.value) || 25)
                   }
-                  className="bg-gray-700 text-white px-3 py-2 rounded-lg border border-gray-600 focus:border-green-500 focus:outline-none w-20 text-center"
+                  className="bg-gray-700 text-white px-3 py-2 rounded-lg border border-gray-600 focus:border-green-500 focus:outline-none w-20 text-center dark:bg-gray-700 dark:text-white dark:border-gray-600"
                   disabled={timerRunning}
                 />
                 <span className="text-gray-300 self-center">minutes</span>

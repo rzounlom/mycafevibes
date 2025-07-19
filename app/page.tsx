@@ -3,14 +3,14 @@ import SidebarControls from "@/components/SidebarControls";
 
 export default function Home() {
   return (
-    <main className="min-h-screen w-full bg-gray-900 text-white font-sans relative overflow-hidden">
+    <main className="min-h-screen w-full bg-[var(--background)] text-[var(--foreground)] font-sans relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 1px, transparent 1px),
-                           radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+            backgroundImage: `radial-gradient(circle at 25% 25%, rgba(0,0,0,0.1) 1px, transparent 1px),
+                           radial-gradient(circle at 75% 75%, rgba(0,0,0,0.1) 1px, transparent 1px)`,
             backgroundSize: "50px 50px",
           }}
         />
@@ -23,15 +23,15 @@ export default function Home() {
       <div className="relative z-10 flex flex-col lg:flex-row items-start justify-between w-full h-full p-8 lg:p-12 max-w-7xl mx-auto">
         {/* Left Text Content */}
         <div className="flex-1 lg:pr-16 mb-12 lg:mb-0">
-          <h1 className="text-5xl lg:text-7xl font-bold font-serif leading-tight mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent whitespace-nowrap">
+          <h1 className="text-6xl lg:text-8xl font-bold font-serif leading-tight mb-6 bg-gradient-to-r from-[var(--text-primary)] to-[var(--text-secondary)] bg-clip-text text-transparent whitespace-nowrap">
             Cloud Cafe
           </h1>
-          <p className="text-xl lg:text-2xl text-gray-300 mb-8 leading-relaxed">
+          <p className="text-xl lg:text-2xl text-[var(--text-secondary)] mb-8 leading-relaxed">
             Take a seat and stay awhile.
           </p>
 
           {/* Description */}
-          <div className="text-gray-400 text-lg leading-relaxed max-w-2xl">
+          <div className="text-[var(--text-muted)] text-lg leading-relaxed max-w-2xl">
             <p className="mb-4">
               Missing the ambient sounds of your favorite coffee shop? Recreate
               that perfect cafe atmosphere with carefully curated sounds.
@@ -43,11 +43,11 @@ export default function Home() {
           </div>
 
           {/* Quick Start Guide */}
-          <div className="mt-8 p-6 bg-gray-800/30 backdrop-blur-sm rounded-xl border border-gray-700/30">
-            <h3 className="text-lg font-semibold text-white mb-3">
+          <div className="mt-8 p-6 bg-[var(--card-bg)] backdrop-blur-sm rounded-xl border border-[var(--card-border)] shadow-lg">
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
               Quick Start
             </h3>
-            <div className="text-sm text-gray-300 space-y-2">
+            <div className="text-sm text-[var(--text-secondary)] space-y-2">
               <p>• Use the master volume to control overall sound level</p>
               <p>• Mix individual sounds to create your perfect atmosphere</p>
               <p>• Set a timer to take regular breaks</p>
@@ -63,7 +63,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="relative z-10 absolute bottom-4 left-6 text-sm text-gray-500">
+      <footer className="relative z-10 absolute bottom-4 left-6 text-sm text-[var(--text-muted)]">
         <p>Created by Cloud Cafe © 2025. All rights reserved.</p>
       </footer>
     </main>
