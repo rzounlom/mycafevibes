@@ -5,8 +5,11 @@ import SpotifyPlayer from "@/components/SpotifyPlayer";
 export default function Home() {
   return (
     <main className="min-h-screen w-full bg-[var(--background)] text-[var(--foreground)] font-sans relative overflow-hidden">
+      {/* Cafe Sketch Background */}
+      <div className="cafe-sketch-bg"></div>
+
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
+      <div className="absolute inset-0 opacity-3">
         <div
           className="absolute inset-0"
           style={{
