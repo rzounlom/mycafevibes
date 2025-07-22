@@ -1,5 +1,31 @@
 @import "tailwindcss";
 
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3b82f6e6;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #93c5fd;
+  cursor: pointer;
+}
+
+/* Firefox only */
+@-moz-document url-prefix() {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #3b82f6e6 #f1f1f1;
+  }
+}
+
 :root {
   /* Light theme (default) */
   --background: #f8fafc;
@@ -128,24 +154,6 @@ body {
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--slider-bg);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--text-muted);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-secondary);
 }
 
 /* Theme transition */
