@@ -288,11 +288,19 @@ export default function ControlIcons() {
           className={`p-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-110 backdrop-blur-sm border cursor-pointer ${
             active.timer
               ? "bg-green-500/90 text-white border-green-400/50"
+              : timerRunning
+              ? "bg-orange-500/90 text-white border-orange-400/50"
               : "bg-gray-800/80 text-gray-300 border-gray-700/50 hover:bg-gray-700/80 hover:text-white dark:bg-gray-800/80 dark:text-gray-300 dark:border-gray-700/50 dark:hover:bg-gray-700/80 dark:hover:text-white"
           }`}
-          title="Timer"
+          title={timerRunning ? `Timer: ${formatTime(timeLeft)}` : "Timer"}
         >
-          <FaClock size={18} />
+          {timerRunning ? (
+            <div className="text-xs font-mono font-bold w-8 text-center">
+              {formatTime(timeLeft)}
+            </div>
+          ) : (
+            <FaClock size={18} />
+          )}
         </button>
         <button
           onClick={() => toggle("todo")}
