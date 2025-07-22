@@ -21,18 +21,18 @@ export default function Home() {
       <ControlIcons />
 
       {/* Center Content */}
-      <div className="relative z-10 flex flex-col lg:flex-row items-start justify-between w-full h-full p-4 lg:p-12 max-w-7xl mx-auto mt-14">
+      <div className="relative z-10 flex flex-col lg:flex-row items-start justify-between w-full h-full p-4 lg:p-12 max-w-7xl mx-auto mt-7.5">
         {/* Left Text Content */}
         <div className="flex-1 lg:pr-16 mb-8 lg:mb-0">
           <h1 className="text-6xl lg:text-8xl font-bold font-serif leading-tight mb-6 bg-gradient-to-r from-[var(--text-primary)] to-[var(--text-secondary)] bg-clip-text text-transparent whitespace-nowrap">
             Cloud Cafe
           </h1>
-          <p className="text-xl lg:text-2xl text-[var(--text-secondary)] mb-8 leading-relaxed">
+          <p className="text-xl lg:text-2xl text-[var(--text-secondary)] mb-1 leading-relaxed">
             Take a seat and stay awhile.
           </p>
 
           {/* Description */}
-          <div className="text-[var(--text-muted)] text-lg leading-relaxed max-w-2xl mb-8">
+          <div className="text-[var(--text-muted)] text-lg leading-relaxed max-w-2xl mb-8 lg:mb-7.5">
             <p className="mb-4">
               Missing the ambient sounds of your favorite coffee shop? Recreate
               that perfect cafe atmosphere with carefully curated sounds.
@@ -57,7 +57,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="relative z-10 absolute bottom-4 left-6 text-sm text-[var(--text-muted)]">
+      <footer className="text-center relative z-10 absolute bottom-4 left-6 text-sm text-[var(--text-muted)] mt-6 lg:mt-0">
         <p>Created by Cloud Cafe © 2025. All rights reserved.</p>
       </footer>
     </main>
