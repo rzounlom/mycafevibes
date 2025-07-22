@@ -45,10 +45,7 @@ export default function Home() {
 
           {/* Spotify Playlist Section */}
           <SpotifyPlayer
-            clientId={
-              process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID ||
-              "your-spotify-client-id"
-            }
+            clientId={process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID || ""}
             defaultPlaylistId="37i9dQZF1DX5Vy6DFOcx00"
           />
         </div>

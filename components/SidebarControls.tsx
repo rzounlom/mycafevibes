@@ -213,7 +213,7 @@ export default function SidebarControls({
   };
 
   return (
-    <aside className="w-full max-w-full lg:max-w-md max-h-[85vh] overflow-hidden flex flex-col relative z-30">
+    <aside className="w-full max-w-full lg:max-w-md max-h-[88vh] overflow-hidden flex flex-col relative z-30">
       {/* Master Volume Control */}
       <div className="bg-[var(--card-bg)] backdrop-blur-sm rounded-2xl p-6 border border-[var(--card-border)] mb-6 flex-shrink-0 shadow-lg">
         <div className="flex items-center justify-between mb-4">
