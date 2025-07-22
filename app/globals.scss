@@ -10,11 +10,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #3b82f6e6;
+  background: #8eb9ffe6;
+  transition: all 0.2s ease-in-out;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #93c5fd;
+  background: #d2e7ff;
   cursor: pointer;
 }
 
@@ -33,7 +34,7 @@
   --card-bg: #ffffff;
   --card-border: #e2e8f0;
   --text-primary: #1e293b;
-  --text-secondary: #64748b;
+  --text-secondary: #61748e;
   --text-muted: #94a3b8;
   --accent: #10b981;
   --accent-hover: #059669;

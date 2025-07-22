@@ -21,9 +21,9 @@ type TimerMode = "pomodoro" | "shortBreak" | "longBreak";
 
 // Storage keys for pomodoro preferences
 const POMODORO_STORAGE_KEYS = {
-  TIMER_MODE: "cloudcafe_timer_mode",
-  AUTO_START: "cloudcafe_auto_start",
-  SAVE_PREFERENCES: "cloudcafe_save_preferences",
+  TIMER_MODE: "mycafevibes_timer_mode",
+  AUTO_START: "mycafevibes_auto_start",
+  SAVE_PREFERENCES: "mycafevibes_save_preferences",
 };
 
 export default function ControlIcons() {

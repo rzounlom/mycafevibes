@@ -28,7 +28,7 @@ export default function Home() {
         {/* Left Text Content */}
         <div className="flex-1 lg:pr-16 mb-8 lg:mb-0">
           <h1 className="text-6xl lg:text-8xl font-bold font-serif leading-tight mb-6 bg-gradient-to-r from-[var(--text-primary)] to-[var(--text-secondary)] bg-clip-text text-transparent whitespace-nowrap">
-            Cloud Cafe
+            MyCafeVibes
           </h1>
           <p className="text-xl lg:text-2xl text-[var(--text-secondary)] mb-1 leading-relaxed">
             Take a seat and stay awhile.
@@ -61,7 +61,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="text-center relative z-10 absolute bottom-4 left-6 text-sm text-[var(--text-muted)] mt-6 lg:mt-0">
-        <p>Created by Cloud Cafe © 2025. All rights reserved.</p>
+        <p>Created by MyCafeVibes © 2025. All rights reserved.</p>
       </footer>
     </main>
   );

@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/ThemeContext";
 
 export const metadata: Metadata = {
-  title: "Cloud Cafe",
+  title: "MyCafeVibes",
   description: "Take a seat and stay awhile with ambient cafe sounds",
 };
 

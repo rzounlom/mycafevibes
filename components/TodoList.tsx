@@ -20,8 +20,8 @@ interface Todo {
 
 // Storage keys for todo preferences
 const TODO_STORAGE_KEYS = {
-  TODOS: "cloudcafe_todos",
-  SAVE_PREFERENCES: "cloudcafe_todo_save_preferences",
+  TODOS: "mycafevibes_todos",
+  SAVE_PREFERENCES: "mycafevibes_todo_save_preferences",
 };
 
 export default function TodoList({ onClose }: { onClose: () => void }) {

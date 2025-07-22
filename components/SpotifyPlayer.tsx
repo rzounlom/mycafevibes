@@ -122,7 +122,7 @@ export default function SpotifyPlayer({
 
       window.onSpotifyWebPlaybackSDKReady = () => {
         const player = new window.Spotify.Player({
-          name: "Cloud Cafe Player",
+          name: "MyCafeVibes Player",
           getOAuthToken: (cb) => {
             cb(accessToken);
           },
@@ -383,7 +383,7 @@ export default function SpotifyPlayer({
     <div className="bg-[var(--card-bg)] backdrop-blur-sm rounded-2xl p-6 border border-[var(--card-border)] shadow-lg w-full">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-semibold text-[var(--text-primary)]">
-          Cafe Vibes Playlist
+          MyCafeVibes Playlist
         </h2>
         {isConnected ? (
           <button
@@ -404,7 +404,7 @@ export default function SpotifyPlayer({
 
       <p className="text-[var(--text-secondary)] mb-4">
         {isConnected
-          ? "Connected to Spotify - Enjoy your personalized cafe atmosphere!"
+          ? "Connected to Spotify - Enjoy your personalized MyCafeVibes atmosphere!"
           : "Enjoy our curated cafe atmosphere music. Connect your Spotify for personalized playlists."}
       </p>
 
@@ -520,7 +520,7 @@ export default function SpotifyPlayer({
             allowFullScreen
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
             loading="lazy"
-            title="Cafe Vibes Playlist"
+            title="MyCafeVibes Playlist"
           />
         </div>
       )}

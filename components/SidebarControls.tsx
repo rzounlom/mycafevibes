@@ -29,11 +29,11 @@ const SOUND_CONTROLS = [
 
 // Storage keys
 const STORAGE_KEYS = {
-  VOLUMES: "cloudcafe_volumes",
-  PANS: "cloudcafe_pans",
-  MASTER_VOLUME: "cloudcafe_master_volume",
-  SHOW_PAN_CONTROLS: "cloudcafe_show_pan_controls",
-  SAVE_PREFERENCES: "cloudcafe_save_preferences",
+  VOLUMES: "mycafevibes_volumes",
+  PANS: "mycafevibes_pans",
+  MASTER_VOLUME: "mycafevibes_master_volume",
+  SHOW_PAN_CONTROLS: "mycafevibes_show_pan_controls",
+  SAVE_PREFERENCES: "mycafevibes_save_preferences",
 };
 
 export default function SidebarControls({
