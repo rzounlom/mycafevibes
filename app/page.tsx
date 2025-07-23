@@ -24,7 +24,7 @@ export default function Home() {
       <ControlIcons />
 
       {/* Center Content */}
-      <div className="relative z-10 flex flex-col lg:flex-row items-start justify-between w-full h-full p-4 lg:p-12 max-w-7xl mx-auto mt-7.5">
+      <div className="relative z-10 flex flex-col lg:flex-row items-start justify-between w-full h-full p-4 lg:p-12 max-w-7xl mx-auto mt-14 lg:mt-7.5">
         {/* Left Text Content */}
         <div className="flex-1 lg:pr-16 mb-8 lg:mb-0">
           <h1 className="text-6xl lg:text-8xl font-bold font-serif leading-tight mb-6 bg-gradient-to-r from-[var(--text-primary)] to-[var(--text-secondary)] bg-clip-text text-transparent whitespace-nowrap">
