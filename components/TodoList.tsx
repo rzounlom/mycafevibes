@@ -250,7 +250,7 @@ export default function TodoList({ onClose }: { onClose: () => void }) {
         </div>
 
         {/* Add Todo Form */}
-        <div className="flex gap-2 mb-6 flex-shrink-0">
+        <div className="flex flex-col sm:flex-row gap-2 mb-6 flex-shrink-0">
           <input
             type="text"
             value={newTodoText}
@@ -259,24 +259,26 @@ export default function TodoList({ onClose }: { onClose: () => void }) {
             placeholder="Add a new todo..."
             className="flex-1 px-4 py-2 bg-[var(--button-bg)] border border-[var(--card-border)] rounded-lg text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
           />
-          <select
-            value={newTodoPriority}
-            onChange={(e) =>
-              setNewTodoPriority(e.target.value as Todo["priority"])
-            }
-            className="px-3 py-2 bg-[var(--button-bg)] border border-[var(--card-border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] cursor-pointer"
-          >
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-          </select>
-          <button
-            onClick={addTodo}
-            className="px-4 py-2 bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white rounded-lg transition-colors cursor-pointer flex items-center gap-2"
-          >
-            <FaPlus size={14} />
-            Add
-          </button>
+          <div className="flex gap-2 w-full">
+            <select
+              value={newTodoPriority}
+              onChange={(e) =>
+                setNewTodoPriority(e.target.value as Todo["priority"])
+              }
+              className="w-[48%] px-3 py-2 bg-[var(--button-bg)] border border-[var(--card-border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] cursor-pointer"
+            >
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+            <button
+              onClick={addTodo}
+              className="w-[48%] px-4 py-2 bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap"
+            >
+              <FaPlus size={14} />
+              Add
+            </button>
+          </div>
         </div>
 
         {/* Controls */}
