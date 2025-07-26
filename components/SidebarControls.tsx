@@ -4,7 +4,7 @@ import { FaPause, FaPlay, FaVolumeMute, FaVolumeUp } from "react-icons/fa";
 import { useEffect, useRef, useState } from "react";
 
 const SOUND_CONTROLS = [
-  { label: "Café Chatter", file: "/audio/cafe-chatter.mp3", key: "chatter" },
+  { label: "Café Chatter", file: "/audio/cafe-chatter.wav", key: "chatter" },
   {
     label: "Café With Live Guitar",
     file: "/audio/cafe-live-guitar.wav",
