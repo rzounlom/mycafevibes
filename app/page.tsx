@@ -54,7 +54,7 @@ export default function Home() {
         </div>
 
         {/* Right Sidebar Controls */}
-        <div className="w-full lg:w-96 lg:flex-shrink-0">
+        <div className="w-full lg:w-96">
           <SidebarControls showPlayPause={true} />
         </div>
       </div>
@@ -64,7 +64,7 @@ export default function Home() {
         href="https://ko-fi.com/mycafevibes"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 left-6 z-50 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-medium text-sm flex items-center gap-2 backdrop-blur-sm border border-blue-400/30 hover:cursor-pointer"
+        className="fixed bottom-6 left-6 lg:top-6 lg:bottom-auto z-50 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-medium text-sm flex items-center gap-2 backdrop-blur-sm border border-blue-400/30 hover:cursor-pointer"
       >
         <svg
           className="w-5 h-5"
