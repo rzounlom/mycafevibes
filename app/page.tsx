@@ -59,6 +59,25 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Floating Buy Us a Coffee Button */}
+      <a
+        href="https://ko-fi.com/mycafevibes"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 left-6 z-50 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-medium text-sm flex items-center gap-2 backdrop-blur-sm border border-blue-400/30 hover:cursor-pointer"
+      >
+        <svg
+          className="w-5 h-5"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M18.5 3H6c-1.1 0-2 .9-2 2v5.71c0 3.83 2.95 7.18 6.78 7.29 3.96.12 7.22-3.06 7.22-7v-1h.5c1.93 0 3.5-1.57 3.5-3.5S20.43 3 18.5 3zM16 5v3h-2V5h2zm-2.5 0c-.83 0-1.5.67-1.5 1.5S12.67 8 13.5 8 15 7.33 15 6.5 14.33 5 13.5 5zm5.5 5.5c0 2.76-2.24 5-5 5s-5-2.24-5-5V5h10v5.5z" />
+          <path d="M2 19h18v2H2z" />
+        </svg>
+        Buy us a coffee?
+      </a>
+
       {/* Footer */}
       <footer className="text-center relative z-10 absolute bottom-4 left-6 text-sm text-[var(--text-muted)] mt-6 lg:mt-0">
         <p>Created by MyCafeVibes © 2025. All rights reserved.</p>
