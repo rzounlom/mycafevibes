@@ -392,8 +392,8 @@ export default function SpotifyPlayer({
       </div>
 
       <p className="text-[var(--text-secondary)] mb-4">
-        Enjoy our curated cafe atmosphere music for the perfect working
-        environment.
+        Enjoy the STUDY Cafe playlist - carefully curated cafe atmosphere music
+        for the perfect working environment.
       </p>
 
       {/* Spotify embed player */}
