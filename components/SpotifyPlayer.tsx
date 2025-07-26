@@ -383,7 +383,7 @@ export default function SpotifyPlayer({
   };
 
   return (
-    <div className="bg-[var(--card-bg)] backdrop-blur-sm rounded-2xl p-6 border border-[var(--card-border)] shadow-lg w-full">
+    <div className="bg-[var(--card-bg)] backdrop-blur-sm rounded-2xl p-6 border border-[var(--card-border)] shadow-lg w-full h-full">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-semibold text-[var(--text-primary)]">
           MyCafeVibes Playlist
@@ -397,7 +397,7 @@ export default function SpotifyPlayer({
       </p>
 
       {/* Spotify embed player */}
-      <div className="w-full">
+      <div className="w-full h-full">
         <iframe
           data-testid="embed-iframe"
           style={{ borderRadius: "12px" }}

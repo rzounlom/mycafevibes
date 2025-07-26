@@ -24,6 +24,9 @@ const POMODORO_STORAGE_KEYS = {
   TIMER_MODE: "mycafevibes_timer_mode",
   AUTO_START: "mycafevibes_auto_start",
   SAVE_PREFERENCES: "mycafevibes_save_preferences",
+  CUSTOM_DURATIONS: "mycafevibes_custom_durations",
+  FOCUS_SESSIONS_BEFORE_LONG_BREAK:
+    "mycafevibes_focus_sessions_before_long_break",
 };
 
 export default function ControlIcons() {
@@ -45,13 +48,18 @@ export default function ControlIcons() {
   const [timerFinished, setTimerFinished] = useState(false);
   const [autoStart, setAutoStart] = useState(false);
   const [savePreferences, setSavePreferences] = useState(false);
-
-  // Timer durations
-  const timerDurations = {
+  const [customDurations, setCustomDurations] = useState({
     pomodoro: 25,
     shortBreak: 5,
     longBreak: 15,
-  };
+  });
+  const [focusSessionsBeforeLongBreak, setFocusSessionsBeforeLongBreak] =
+    useState(4);
+  const [completedFocusSessions, setCompletedFocusSessions] = useState(0);
+  const [showCustomSettings, setShowCustomSettings] = useState(false);
+
+  // Timer durations (use custom if available, otherwise defaults)
+  const timerDurations = customDurations;
 
   // Load pomodoro preferences on component mount
   useEffect(() => {
@@ -79,6 +87,22 @@ export default function ControlIcons() {
           );
           if (savedAutoStart) {
             setAutoStart(JSON.parse(savedAutoStart));
+          }
+
+          // Load custom durations
+          const savedCustomDurations = localStorage.getItem(
+            POMODORO_STORAGE_KEYS.CUSTOM_DURATIONS
+          );
+          if (savedCustomDurations) {
+            setCustomDurations(JSON.parse(savedCustomDurations));
+          }
+
+          // Load focus sessions before long break
+          const savedFocusSessions = localStorage.getItem(
+            POMODORO_STORAGE_KEYS.FOCUS_SESSIONS_BEFORE_LONG_BREAK
+          );
+          if (savedFocusSessions) {
+            setFocusSessionsBeforeLongBreak(JSON.parse(savedFocusSessions));
           }
         }
       } catch (error) {
@@ -136,10 +160,21 @@ export default function ControlIcons() {
             if (autoStart) {
               setTimeout(() => {
                 if (timerMode === "pomodoro") {
-                  setTimerMode("shortBreak");
+                  // Increment completed focus sessions
+                  const newCompletedSessions = completedFocusSessions + 1;
+                  setCompletedFocusSessions(newCompletedSessions);
+
+                  // Check if it's time for a long break
+                  if (newCompletedSessions >= focusSessionsBeforeLongBreak) {
+                    setTimerMode("longBreak");
+                    setCompletedFocusSessions(0); // Reset counter after long break
+                  } else {
+                    setTimerMode("shortBreak");
+                  }
                 } else if (timerMode === "shortBreak") {
                   setTimerMode("pomodoro");
                 } else {
+                  // Long break finished, start new focus session
                   setTimerMode("pomodoro");
                 }
                 setTimerFinished(false);
@@ -201,6 +236,7 @@ export default function ControlIcons() {
     setTimerRunning(false);
     setTimeLeft(timerDurations[timerMode] * 60);
     setTimerFinished(false);
+    setCompletedFocusSessions(0); // Reset session counter
   };
 
   const handleTimerModeChange = (mode: TimerMode) => {
@@ -227,6 +263,40 @@ export default function ControlIcons() {
           localStorage.removeItem(key);
         }
       });
+    }
+  };
+
+  const handleCustomDurationChange = (mode: TimerMode, value: number) => {
+    const newDurations = {
+      ...customDurations,
+      [mode]: Math.max(1, Math.min(120, value)),
+    };
+    setCustomDurations(newDurations);
+
+    // Update current timer if it's the active mode
+    if (timerMode === mode && !timerRunning) {
+      setTimeLeft(newDurations[mode] * 60);
+    }
+
+    // Save to localStorage if preferences are enabled
+    if (savePreferences) {
+      localStorage.setItem(
+        POMODORO_STORAGE_KEYS.CUSTOM_DURATIONS,
+        JSON.stringify(newDurations)
+      );
+    }
+  };
+
+  const handleFocusSessionsChange = (value: number) => {
+    const newValue = Math.max(1, Math.min(10, value));
+    setFocusSessionsBeforeLongBreak(newValue);
+
+    // Save to localStorage if preferences are enabled
+    if (savePreferences) {
+      localStorage.setItem(
+        POMODORO_STORAGE_KEYS.FOCUS_SESSIONS_BEFORE_LONG_BREAK,
+        JSON.stringify(newValue)
+      );
     }
   };
 
@@ -362,7 +432,9 @@ export default function ControlIcons() {
                   timerMode
                 )} ${timerFinished ? "animate-pulse" : ""}`}
               >
-                {formatTime(timeLeft)}
+                {timerRunning
+                  ? formatTime(timeLeft)
+                  : formatTime(timerDurations[timerMode] * 60)}
               </div>
 
               <div
@@ -371,6 +443,12 @@ export default function ControlIcons() {
                 )}`}
               >
                 {getModeLabel(timerMode)}
+                {timerMode === "pomodoro" && (
+                  <span className="text-sm text-[var(--text-muted)] ml-2">
+                    ({completedFocusSessions + 1}/{focusSessionsBeforeLongBreak}
+                    )
+                  </span>
+                )}
               </div>
 
               {timerFinished && (
@@ -390,6 +468,97 @@ export default function ControlIcons() {
                   />
                   <span>Auto-start next timer</span>
                 </label>
+              </div>
+
+              {/* Custom Duration Settings */}
+              <div className="mb-6">
+                <button
+                  onClick={() => setShowCustomSettings(!showCustomSettings)}
+                  className="text-[var(--accent)] hover:text-[var(--accent-hover)] text-sm font-medium transition-colors cursor-pointer flex items-center gap-2"
+                >
+                  {showCustomSettings ? "Hide" : "Show"} Custom Times
+                </button>
+
+                {showCustomSettings && (
+                  <div className="mt-4 p-4 bg-[var(--button-bg)] rounded-lg border border-[var(--card-border)]">
+                    <h4 className="text-sm font-medium text-[var(--text-primary)] mb-3">
+                      Custom Timer Durations (minutes)
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm text-[var(--text-secondary)]">
+                          Focus Time:
+                        </label>
+                        <input
+                          type="number"
+                          min="1"
+                          max="120"
+                          value={customDurations.pomodoro}
+                          onChange={(e) =>
+                            handleCustomDurationChange(
+                              "pomodoro",
+                              parseInt(e.target.value) || 25
+                            )
+                          }
+                          className="w-16 px-2 py-1 text-sm bg-[var(--background)] border border-[var(--card-border)] rounded text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+                        />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm text-[var(--text-secondary)]">
+                          Short Break:
+                        </label>
+                        <input
+                          type="number"
+                          min="1"
+                          max="60"
+                          value={customDurations.shortBreak}
+                          onChange={(e) =>
+                            handleCustomDurationChange(
+                              "shortBreak",
+                              parseInt(e.target.value) || 5
+                            )
+                          }
+                          className="w-16 px-2 py-1 text-sm bg-[var(--background)] border border-[var(--card-border)] rounded text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+                        />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm text-[var(--text-secondary)]">
+                          Long Break:
+                        </label>
+                        <input
+                          type="number"
+                          min="1"
+                          max="60"
+                          value={customDurations.longBreak}
+                          onChange={(e) =>
+                            handleCustomDurationChange(
+                              "longBreak",
+                              parseInt(e.target.value) || 15
+                            )
+                          }
+                          className="w-16 px-2 py-1 text-sm bg-[var(--background)] border border-[var(--card-border)] rounded text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+                        />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm text-[var(--text-secondary)]">
+                          Focus Sessions before Long Break:
+                        </label>
+                        <input
+                          type="number"
+                          min="1"
+                          max="10"
+                          value={focusSessionsBeforeLongBreak}
+                          onChange={(e) =>
+                            handleFocusSessionsChange(
+                              parseInt(e.target.value) || 4
+                            )
+                          }
+                          className="w-16 px-2 py-1 text-sm bg-[var(--background)] border border-[var(--card-border)] rounded text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Save preferences toggle */}

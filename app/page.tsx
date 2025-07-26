@@ -24,9 +24,9 @@ export default function Home() {
       <ControlIcons />
 
       {/* Center Content */}
-      <div className="relative z-10 flex flex-col lg:flex-row items-start justify-between w-full h-full p-4 lg:p-12 max-w-7xl mx-auto mt-14 lg:mt-7.5">
+      <div className="relative z-10 flex flex-col lg:flex-row items-start justify-between w-full h-full p-4 lg:pt-12 lg:p-4 max-w-7xl mx-auto mt-14 lg:mt-7.5">
         {/* Left Text Content */}
-        <div className="flex-1 lg:pr-16 mb-8 lg:mb-0">
+        <div className="flex-1 pr-0 lg:pr-6 mb-8 lg:mb-0">
           <h1 className="text-6xl lg:text-8xl font-bold font-serif leading-tight mb-6 bg-gradient-to-r from-[var(--text-primary)] to-[var(--text-secondary)] bg-clip-text text-transparent whitespace-nowrap">
             MyCafeVibes
           </h1>
@@ -35,7 +35,7 @@ export default function Home() {
           </p>
 
           {/* Description */}
-          <div className="text-[var(--text-muted)] text-lg leading-relaxed max-w-2xl mb-8 lg:mb-7.5">
+          <div className="text-[var(--text-muted)] text-lg leading-relaxed max-w-2xl mb-4">
             <p className="mb-4">
               Missing the ambient sounds of your favorite coffee shop? Recreate
               that perfect cafe atmosphere with carefully curated sounds.
